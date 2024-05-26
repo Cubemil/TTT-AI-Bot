@@ -2,21 +2,26 @@
 import sys
 
 from human_agent import HumanAgent
-from random_agent import RandomAgent
+# from random_agent import RandomAgent
+from search_agent import SearchAgent
 from xxo_environment import TicTacToeEnv, agent_by_mark
 
 
+# Changes made to play() because in case of a draw the game would stop normally
+# just pull from git repo to see the previous implementation
+
 def play(show_number=None):
     env = TicTacToeEnv(show_number=show_number)
-    agents = [RandomAgent('O'),
+    # changed search agent vs human here
+    agents = [SearchAgent('O'),
               HumanAgent('X')]
     episode = 0
     while True:
         state = env.reset()
-        _, mark = state
         done = False
         env.render()
         while not done:
+            board, mark = state
             agent = agent_by_mark(agents, mark)
             env.show_turn(True, mark)
             ava_actions = env.available_actions()
@@ -31,8 +36,6 @@ def play(show_number=None):
             if done:
                 env.show_result(True, mark, reward)
                 break
-            else:
-                _, mark = state
         episode += 1
 
 
